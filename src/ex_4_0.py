@@ -10,23 +10,14 @@ FILENAME = get_data_file_path('messages.log')
 
 
 def get_shutdown_events(logfile):
-    
-    with open(logfile, 'r') as file:
-        
-        data = file.read()
-    
-    shutdowns = list()
-    
-    for line in data.splitlines():
-        
-        if 'Shutdown initiated' in line :
-            
-            shutdowns.append(line)
-    
-    return shutdowns
-    
+    shutdown_lines = []
+    with open(logfile, "r") as f:
+        for line in f:
+            if "Shutdown initiated" in line:
+                shutdown_lines.append(line.strip())
+    return shutdown_lines
 
 
 # >>>> The code below will call your function and print the results
-if _name_ == "_main_":
+if __name__ == "__main__":
     print(f"{get_shutdown_events(FILENAME)=}")
