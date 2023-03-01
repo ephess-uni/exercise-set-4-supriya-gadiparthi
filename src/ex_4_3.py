@@ -1,32 +1,34 @@
 """ ex_4_3.py """
-import os
+from datetime import datetime
+from datetime import timedelta
 
-try:
-    from src.ex_4_0 import get_shutdown_events
-    from src.ex_4_2 import logstamp_to_datetime
-    from src.util import get_data_file_path
-except ImportError:
-    from ex_4_0 import get_shutdown_events
-    from ex_4_2 import logstamp_to_datetime
-    from util import get_data_file_path
 
-# Use this FILENAME variable to test your function.
-FILENAME = get_data_file_path("messages.log")
-# >>>> DO NOT MODIFY CODE ABOVE <<<<
+def get_shutdown_events(logfile):
+    """ Function 1"""
+    f = open(logfile, 'rt')
+    x = list()
+
+    for i in f:
+        x.append(i)
+    final_lis = list()
+    for i in x:
+        if i.split()[4] == 'initiated.':
+            final_lis.append(i[:-2])
+    return final_lis
+
+
+def logstamp_to_datetime(datestr):
+    """ Function 2"""
+    input_str = datestr
+    format_str = '%Y-%m-%dT%H:%M:%S'
+    return datetime.strptime(input_str, format_str)
 
 
 def time_between_shutdowns(logfile):
-    # Get the shutdown events from the logfile
-    shutdown_events = get_shutdown_events(logfile)
-
-    # Get the datetime objects for the first and last shutdown events
-    first_shutdown = logstamp_to_datetime(shutdown_events[0].split()[1])
-    last_shutdown = logstamp_to_datetime(shutdown_events[-1].split()[1])
-
-    # Compute the difference in time between the two events and return as timedelta object
-    return abs(last_shutdown - first_shutdown)
-
-
-# >>>> The code below will call your function and print the results
-if __name__ == "__main__":
-    print(f'{time_between_shutdowns(FILENAME)=}')
+    """ Function 3"""
+    x = get_shutdown_events(logfile)
+    y = list()
+    for i in x:
+        u = i.split()[1]
+        y.append(logstamp_to_datetime(u))
+    return y[-1]-y[0]
