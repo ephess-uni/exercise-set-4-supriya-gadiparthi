@@ -1,17 +1,34 @@
 """ ex_4_2.py """
 from datetime import datetime
+from datetime import timedelta
+
+
+def get_shutdown_events(logfile):
+    """ Function 1"""
+    f = open(logfile, 'rt')
+    x = list()
+
+    for i in f:
+        x.append(i)
+    final_lis = list()
+    for i in x:
+        if i.split()[4] == 'initiated.':
+            final_lis.append(i[:-2])
+    return final_lis
 
 
 def logstamp_to_datetime(datestr):
-    try:
-        # Try to parse the date string as-is
-        return datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S')
-    except ValueError:
-        # If parsing fails, try to add microseconds and parse again
-        return datetime.strptime(datestr + '.000000', '%Y-%m-%dT%H:%M:%S.%f')
+    """ Function 2"""
+    input_str = datestr
+    format_str = '%Y-%m-%dT%H:%M:%S'
+    return datetime.strptime(input_str, format_str)
 
 
-# >>>> The code below will call your function and print the results
-if __name__ == "__main__":
-    test_date = '2022-12-01T01:02:03'
-    print(f'{logstamp_to_datetime(test_date)=}')
+def time_between_shutdowns(logfile):
+    """ Function 3"""
+    x = get_shutdown_events(logfile)
+    y = list()
+    for i in x:
+        u = i.split()[1]
+        y.append(logstamp_to_datetime(u))
+    return y[-1]-y[0]
